@@ -24,6 +24,7 @@ MQ2NavigationType::MQ2NavigationType()
 	TypeMember(PathLength);
 	TypeMember(Setting);
 	TypeMember(Velocity);
+	TypeMember(CurrentPathDistance)
 }
 
 MQ2NavigationType::~MQ2NavigationType()
@@ -72,6 +73,16 @@ bool MQ2NavigationType::GetMember(MQVarPtr VarPtr, const char* Member, PCHAR Ind
 		Dest.Type = mq::datatypes::pIntType;
 		Dest.Int = static_cast<int>(glm::round(GetMyVelocity()));
 		return true;
+	}
+	case CurrentPathDistance: {
+		auto m_activePath = m_nav->GetActivePath();
+		if (m_activePath)
+		{
+			Dest.Type = mq::datatypes::pFloatType;
+			Dest.Float = m_activePath->GetPathTraversalDistance();
+			return true;
+		}
+		return false;
 	}
 	}
 
